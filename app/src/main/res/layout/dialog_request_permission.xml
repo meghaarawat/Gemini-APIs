@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/medHMargin"
+        app:cardCornerRadius="@dimen/_20sdp"
+        app:cardElevation="@dimen/_8sdp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/smallPadding"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/tvTitleReq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:paddingHorizontal="@dimen/smallPadding"
+                android:text="Permission"
+                android:textSize="@dimen/normalTextSize"
+                android:layout_marginTop="@dimen/smallMargin"
+                android:textColor="@color/black"
+                android:fontFamily="@font/nunito_bold" />
+
+            <TextView
+                android:id="@+id/tvDescriptionReq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvTitleReq"
+                android:layout_marginTop="@dimen/smallMargin"
+                android:layout_marginBottom="@dimen/margin"
+                android:layout_centerHorizontal="true"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/medTextSize"
+                android:fontFamily="@font/nunito_regular" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvDescriptionReq"
+                android:weightSum="2"
+                android:layout_marginBottom="@dimen/smallMargin"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonCancelReq"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/minMargin"
+                    android:fontFamily="@font/nunito_bold"
+                    android:text="Cancel" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/buttonOkReq"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/nunito_bold"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/minMargin"
+                    android:text="OK" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</FrameLayout>
