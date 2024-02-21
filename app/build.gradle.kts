@@ -50,7 +50,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     // AI
-    implementation("com.google.ai.client.generativeai:generativeai:0.1.2")
+    implementation("com.google.ai.client.generativeai:generativeai:0.2.0")
 
     // DIMENSIONS
     implementation("com.intuit.sdp:sdp-android:1.1.0")

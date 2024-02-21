@@ -5,7 +5,6 @@ import android.os.Bundle
 import com.kitlabs.aiapp.base.BaseActivity
 import com.kitlabs.aiapp.databinding.ActivityMainBinding
 import com.kitlabs.aiapp.others.Toaster
-import com.kitlabs.aiapp.ui.frags.AIFragment
 
 class MainActivity : BaseActivity() {
 

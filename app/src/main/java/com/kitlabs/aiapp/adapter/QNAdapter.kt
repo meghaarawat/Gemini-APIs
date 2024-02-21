@@ -1,7 +1,9 @@
 package com.kitlabs.aiapp.adapter
 
+import android.text.Html
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kitlabs.aiapp.databinding.ItemAnswerBinding
@@ -47,12 +49,20 @@ class QNAdapter(private val list: List<QNModel>) : RecyclerView.Adapter<Recycler
             is AnsViewHolder -> {
                 holder.binding.apply {
                     if(position == (list.size - 1)) {
-                        tvAns.text = item.data
-                        tvAns.avoidTextOverflowAtEdge(false)
-                        tvAns.animateText(item.data)
+                        if(item.isAnimate) {
+                            tvAns.text = Html.fromHtml(item.data, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                            tvAns.avoidTextOverflowAtEdge(false)
+                            tvAns.animateText(item.data)
+                            item.isAnimate = false
+                        }
+                        else {
+                            item.isAnimate = false
+                            tvAns.text = Html.fromHtml(item.data, HtmlCompat.FROM_HTML_MODE_LEGACY)
+                        }
                     }
                     else {
-                        tvAns.text = item.data
+                        item.isAnimate = false
+                        tvAns.text = Html.fromHtml(item.data, HtmlCompat.FROM_HTML_MODE_LEGACY)
                     }
                 }
             }

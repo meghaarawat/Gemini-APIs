@@ -5,5 +5,6 @@ import android.graphics.Bitmap
 data class QNModel(
     val type: String,
     val data: String,
-    val bitmapList: ArrayList<Bitmap>? = null
+    val bitmapList: ArrayList<Bitmap>? = null,
+    var isAnimate: Boolean = false
 )

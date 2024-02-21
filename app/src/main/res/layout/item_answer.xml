@@ -21,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
+        android:textIsSelectable="true"
         android:textAlignment="textStart"
         android:fontFamily="@font/nunito_regular"
         android:textColor="@color/black"

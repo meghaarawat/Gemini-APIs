@@ -1,9 +1,11 @@
-package com.kitlabs.aiapp.ui.frags
+package com.kitlabs.aiapp.ui
 
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -142,11 +144,12 @@ class AIFragment : BaseFragment() {
             listImages.clear()
             adapterImages.notifyDataSetChanged()
             val response = generativeModel.generateContent(query)
-            list.add(QNModel(Cons.ANS, response.text.toString()))
+            Log.d("AI-Response", "ContentFromImage ==> ${response.text.toString()}")
+            list.add(QNModel(Cons.ANS, formatText(response.text.toString()), isAnimate = true))
             MyUtils.viewVisible(binding.rvChat)
             MyUtils.viewInvisible(binding.tvStartChat)
             adapter.notifyItemInserted(0)
-            binding.rvChat.scrollToPosition(0)
+            binding.rvChat.scrollToPosition(list.size - 1)
             binding.ivGallery.isClickable = true
             binding.ivGallery.alpha = 1.0f
             MyUtils.viewVisible(binding.ivDone)
@@ -165,11 +168,12 @@ class AIFragment : BaseFragment() {
             listImages.clear()
             adapterImages.notifyDataSetChanged()
             val response = generativeModel.generateContent(inputContent)
-            list.add(QNModel(Cons.ANS, response.text.toString()))
+            Log.d("AI-Response", "ContentFromImage ==> ${response.text.toString()}")
+            list.add(QNModel(Cons.ANS, formatText(response.text.toString()), isAnimate = true))
             MyUtils.viewVisible(binding.rvChat)
             MyUtils.viewInvisible(binding.tvStartChat)
             adapter.notifyItemInserted(0)
-            binding.rvChat.scrollToPosition(0)
+            binding.rvChat.scrollToPosition(list.size - 1)
             binding.ivGallery.isClickable = true
             binding.ivGallery.alpha = 1.0f
             MyUtils.viewVisible(binding.ivDone)
@@ -179,6 +183,17 @@ class AIFragment : BaseFragment() {
             hideLoader()
             Toast.makeText(context, "An error occurred, please try again later.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun formatText(input: String): String {
+        var formattedText = input
+        // Replace **text** with bold formatting
+        formattedText = formattedText.replace("\\*\\*(.*?)\\*\\*".toRegex(), "<b>$1</b>")
+        // Replace * **text:** with pointer icon and bold formatting
+        formattedText = formattedText.replace("\\* \\*\\*(.*?):\\*\\* ".toRegex(), "&#10148; <b>$1:</b>")
+        // Preserve line breaks
+        formattedText = formattedText.replace("\n", "<br>")
+        return formattedText
     }
 
     private fun setAdapter() {
@@ -235,17 +250,40 @@ class AIFragment : BaseFragment() {
             }
         }
         catch (e: Exception) {
-            Log.d(TAG, "Issue in takePhotoFromGallery()")
+            Log.d(TAG, "Issue in takePhotoFromCamera()")
             e.printStackTrace()
         }
     }
 
     private var cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == AppCompatActivity.RESULT_OK) {
-            val bitmap = BitmapFactory.decodeFile(currentPhotoPath)
-            listImages.add(bitmap)
-            adapterImages.notifyDataSetChanged()
+            val f = currentPhotoPath?.let { File(it) }
+            f?.absolutePath?.let {
+                var bitmap = BitmapFactory.decodeFile(it)
+                val exif = ExifInterface(it)
+                val exifOrientation : Int = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)
+                val exifDegree: Int = exifOrientationToDegree(exifOrientation)
+                bitmap = rotateImage(bitmap, exifDegree.toFloat())
+                listImages.add(bitmap)
+                adapterImages.notifyDataSetChanged()
+            }
         }
         else Log.i(TAG, "Unable to capture image")
+    }
+
+    private fun exifOrientationToDegree(exifOrientation: Int): Int{
+        return when(exifOrientation){
+            ExifInterface.ORIENTATION_ROTATE_90 -> 90
+            ExifInterface.ORIENTATION_ROTATE_180 -> 180
+            ExifInterface.ORIENTATION_ROTATE_270 -> 270
+            else -> 0
+        }
+    }
+
+    private fun rotateImage(source: Bitmap, angle : Float): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(angle)
+
+        return Bitmap.createBitmap(source, 0, 0, source.width, source.height, matrix, true)
     }
 }

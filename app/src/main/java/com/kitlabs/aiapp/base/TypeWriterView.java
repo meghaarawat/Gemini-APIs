@@ -2,15 +2,16 @@ package com.kitlabs.aiapp.base;
 
 import android.content.Context;
 import android.os.Handler;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.view.ViewTreeObserver;
-
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.core.text.HtmlCompat;
 
 public class TypeWriterView extends AppCompatTextView {
     private CharSequence mText;
     private int mIndex;
-    private long mDelay = 20; //Default delay in ms
+    private long mDelay = 4; //Default delay in ms
     private Boolean isAnimationRunning = false;
     private OnAnimationChangeListener mAnimationChangeListener;
     private Boolean avoidTextOverflowAtEdge = true;
@@ -81,7 +82,7 @@ public class TypeWriterView extends AppCompatTextView {
             };
             getViewTreeObserver().addOnGlobalLayoutListener(globalLayoutListener);
         }
-        mText = inpText;
+        mText = Html.fromHtml(inpText, HtmlCompat.FROM_HTML_MODE_LEGACY);
     }
 
     public String generateFormattedSequence(String mText){
